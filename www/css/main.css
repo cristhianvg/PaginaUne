@@ -1,0 +1,35 @@
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.myContainer {
+  height: 85%;
+}
+
+.navbar-inverse {
+  border-radius: 0px;
+}
+
+.myBody {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  height: 100%;
+}
+
+.myBody > nav {
+  width: 20%;
+  margin-right: 20px;
+}
+
+.myBody > main {
+  width: 80%;
+  height: 100%;
+}
+
+.panelPrincipal {
+  height: 100%;
+  overflow: auto;
+}

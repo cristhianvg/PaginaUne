@@ -1,0 +1,146 @@
+<header>
+  <nav class="navbar navbar-inverse" ng-include=" 'app/template/partial/menu.html'"></nav>
+</header>
+
+<div class="container myBody">
+  <nav class="hidden-xs" ng-include=" 'app/template/partial/menuLeft.html'"></nav>
+
+  <main>
+    <div class="panel panel-default panelPrincipal">
+      <div class="panel-body">
+
+        <div class="page-header">
+          <h1>Simulador</h1>
+        </div>
+
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fechaInicial">Fecha inicial</label>
+                <input ng-model="fecha.inicial" type="date" class="form-control" id="fechaInicial" required>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fechaFinal">Fecha final</label>
+                <input ng-model="fecha.final" type="date" class="form-control" id="fechaFinal" required>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="btn-group">
+                  <button type="submit" class="btn btn-default">Cargar datos</button>
+                  <button type="button" class="btn btn-default">Simular</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form>
+          <div class="row">
+            <div class="col-md-6">
+              <h2>Ingresos</h2>
+              <div class="form-group">
+                <label>NOMBRE INGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE INGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h2>Egresos</h2>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>NOMBRE EGRESO</label>
+                <input type="number" class="form-control">
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!--        SELECT ieg_nombre, ieg_valor FROM ingreso_egreso
+                WHERE ieg_deleted_at IS NULL
+                AND ieg_activo = 1
+                AND ieg_tipo = 1
+                AND (
+                  ieg_constante = 0 AND ieg_fecha_vencimiento BETWEEN (:fecha_inicial AND :fecha_final)
+                  OR 
+                  ieg_constante = 1
+                )-->
+
+        <!--        SELECT ieg_nombre, ieg_valor FROM ingreso_egreso
+                WHERE ieg_deleted_at IS NULL
+                AND ieg_activo = 1
+                AND ieg_tipo = 2
+                AND (
+                  ieg_constante = 0 AND ieg_fecha_vencimiento BETWEEN (:fecha_inicial AND :fecha_final)
+                  OR 
+                  ieg_constante = 1
+                )-->
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal fade" id="modalAgregar">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form ng-submit="submitAgregar()">
+          <div class="form-group has-error has-feedback">
+            <input pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="usuario.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario" required ng-trim="true" maxlength="20">
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="help-block">El usuario ya existe</span>
+          </div>
+          <div class="form-group">
+            <input ng-model="usuario.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" required>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <select ng-model="usuario.rol" class="form-control" required>
+              <option value="">Selecione el rol</option>
+              <option value="1">Administrador</option>
+              <option value="2">Cliente</option>
+            </select>
+            <span class="help-block">El usuario ya existe</span>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-primary" type="submit">Agregar</button>
+            <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="modal fade" id="modal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        
+        <form class="formLogin" ng-submit="submit()">
+          <h2 class="formLogin-heading">Iniciar sesión</h2>
+          <input ng-model="login.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario" required ng-trim="true">
+          <input ng-model="login.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" required>
+          <div class="checkbox">
+            <label>
+              <input ng-model="login.recordarme" type="checkbox" value="recordarme"> Recordar sesión
+            </label>
+          </div>
+          <div ng-show="(mensajeError) ? true : false" class="alert alert-danger">{{mensajeError}}</div>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
