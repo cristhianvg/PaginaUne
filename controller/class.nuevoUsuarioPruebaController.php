@@ -1,6 +1,6 @@
 <?php
 
-class nuevoUsuario extends controller {
+class nuevoUsuarioPrueba extends controller {
 
   public function main(\request $request) {
 
@@ -9,25 +9,25 @@ class nuevoUsuario extends controller {
             'value' => ($request->hasParam('cedula')) ? $request->getParam('cedula') : null,
             array(
                 'type' => validate::IS_NOT_NULL,
-                'message' => 'La Cedula Es Obligatoria'
+                'message' => 'La cedula es Obligatoria'
             ),
             array(
                 'type' => validate::IS_NUMBER,
-                'message' => 'Solo Se Permiten Numeros'
+                'message' => 'Solo se permiten numeros'
             )
         ),
         'usuario' => array(
             'value' => ($request->hasParam('usuario')) ? $request->getParam('usuario') : null,
             array(
                 'type' => validate::IS_NOT_NULL,
-                'message' => 'El Usuario Es Obligatorio'
+                'message' => 'El Usuario es Obligatorio'
             ),
         ),
         'contrasena' => array(
             'value' => ($request->hasParam('contrasena')) ? $request->getParam('contrasena') : null,
             array(
                 'type' => validate::IS_NOT_NULL,
-                'message' => 'La Contraseña Es Obligatoria'
+                'message' => 'La contraseña es Obligatoria'
             ),
 //            array(
 //                'type' => validate::CUSTOM,
@@ -46,42 +46,13 @@ class nuevoUsuario extends controller {
             'value' => ($request->hasParam('contrasena2')) ? $request->getParam('contrasena2') : null,
             array(
                 'type' => validate::IS_NOT_NULL,
-                'message' => 'Confirmar La Contraseña Es Obligatorio'
+                'message' => 'Confirmar la contraseña es Obligatorio'
             ),
             array(
                 'type' => validate::IS_EQUAL,
-                'message' => 'Las Contraseñas Son Diferentes',
+                'message' => 'Las Contraseñas son Diferentes',
                 'otherValue' => $request->getParam('contrasena')
             ),
-        ),
-        'nombre' => array(
-            'value' => ($request->hasParam('nombre')) ? $request->getParam('nombre') : null,
-            array(
-                'type' => validate::IS_NOT_NULL,
-                'message' => 'El Nombre Es Obligatorio'
-            ),
-        ),
-        'telefono' => array(
-            'value' => ($request->hasParam('telefono')) ? $request->getParam('telefono') : null,
-            array(
-                'type' => validate::IS_NOT_NULL,
-                'message' => 'El Telefono es Obligatorio'
-            ),
-            array(
-                'type' => validate::IS_NUMBER,
-                'message' => 'Solo Se Permiten Numeros'
-            )
-        ),
-        'correo' => array(
-            'value' => ($request->hasParam('correo')) ? $request->getParam('correo') : null,
-            array(
-                'type' => validate::IS_NOT_NULL,
-                'message' => 'El Correo Es Obligatorio'
-            ),
-            array(
-                'type' => validate::IS_EMAIL,
-                'message' => 'Debes Digitar Un Correo Valido'
-            )
         ),
     );
 
@@ -96,9 +67,6 @@ class nuevoUsuario extends controller {
       $usuario->setUsuario($request->getParam('usuario'));
       $usuario->setContrasena($request->getParam('contrasena'), $this->getConfig()->getHash());
       $usuario->setCedula($request->getParam('cedula'));
-      $usuario->setNombre($request->getParam('nombre'));
-      $usuario->setTelefono($request->getParam('telefono'));
-      $usuario->setCorreo($request->getParam('correo'));
 
       $usuarioDAO = new usuarioDAO($this->getConfig());
       $data = $usuarioDAO->create($usuario);

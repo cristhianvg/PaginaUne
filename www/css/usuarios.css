@@ -1,4 +1,26 @@
 .iconoAgregar{
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
+
+.centro{
+  text-align: center;
+}
+
+.textoAgregar{
+  font-size: 20px; 
+  cursor: pointer;
+}
+
+.tituloModal{
+  font-size: 20px;
+}
+
+.bordeModal{
+  border-top: solid #204d74;
+ }
+ 
+ .page-header{
+   margin-top: 10px;
+ }

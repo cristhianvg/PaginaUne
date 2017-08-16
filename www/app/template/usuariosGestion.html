@@ -13,33 +13,42 @@
           <h1>Gestión de usuarios</h1>
         </div>
 
-        <div class="text-right">
-          <span data-toggle="modal" data-target="#modalAgregar" style="font-size: 20px">Agregar Usuario</span>
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="alert alert-success" ng-show="Registrado">
+              <center>Contacto Creado Con Exito <span><i class="glyphicon glyphicon-ok"></i></span></center>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <span class="textoAgregar" data-toggle="modal" data-target="#modalAgregar">Agregar Usuario</span>
           <img class="img-circle iconoAgregar" src="img/IconoAgregar.png" data-toggle="modal" data-target="#modalAgregar">
+          </div>
         </div>
 
         <div class="table-responsive">
           <table class="table">
             <thead>
               <tr>
-                <th>Cedula</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Fecha de creación</th>
-                <th>Acciones</th>
+                <th class="centro">Cedula</th>
+                <th class="centro">Usuario</th>
+                <th class="centro">Rol</th>
+                <th class="centro">Fecha de creación</th>
+                <th class="centro">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="usuario in usuarios">
                 <td class="centro" hidden>{{usuario.usu_id}}</td>
+                <td class="centro" hidden>{{usuario.usu_nombre}}</td>
                 <td class="centro">{{usuario.usu_cedula}}</td>
                 <td class="centro">{{usuario.usu_alias}}</td>
-                <td class="centro">{{usuario.rol_id}}</td>
+                <td class="centro">{{usuario.rol_nombre}}</td>
                 <td class="centro">{{usuario.usu_created_at}}</td>
-                <td>
+                <td class="centro">
                   <div class="btn-group btn-group-xs" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default" ng-click="editar(usuario)">Editar</button>
-                    <button type="button" class="btn btn-default" ng-click="eliminar(usuario)">Eliminar</button>
+                    <button style="margin-right: 10px;" type="button" title="Editar" class="btn btn-warning" ng-click="editar(usuario)"><i class="glyphicon glyphicon-pencil"></i></button>
+                    <button style="margin-right: 10px;" type="button" title="Eliminar" class="btn btn-danger" ng-click="eliminar(usuario)"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button type="button" title="ver" class="btn btn-info" ng-click="ver(usuario)"><i class="glyphicon glyphicon-eye-open"></i></button>
                   </div>
                 </td>
               </tr>
@@ -54,42 +63,89 @@
 
 <!-- MODAL AGREGAR -->
 <div class="modal fade" id="modalAgregar">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-body">
+      <div class="modal-body bordeModal">
         <div class="row">
-          <div class="col-xs-10 col-xs-offset-1">
-            <div class="page-header">
-              <p>Nuevo Usuario</p>
-            </div>
-            <form ng-submit="submitAgregar()">
-              <div class="form-group has-error has-feedback">
-                <input pattern="[0-9]+" title="Solo se permite Numeros" ng-model="usuarioNuevo.cedula" type="text" id="cedula" class="form-control" placeholder="Cedula" required ng-trim="true" maxlength="10">
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <span class="help-block">El usuario ya existe</span>
+          <form ng-submit="submitAgregarUsu()">
+            <div class="col-lg-5 col-lg-offset-1">
+              <div class="page-header">
+                <p class="tituloModal"><span class="glyphicon glyphicon-user"></span> Datos Personales</p>
               </div>
-              <div class="form-group has-error has-feedback">
-                <input pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="usuarioNuevo.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario" required ng-trim="true" maxlength="20">
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <span class="help-block">El usuario ya existe</span>
+              <div class="form-group" ng-class="error.cedula ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-credit-card" style="color: #222"></i></div>
+                  <input title="Solo se permite Numeros" ng-model="usuarioNuevo.cedula" type="text" id="cedula" class="form-control" placeholder="Cedula" ng-trim="true" maxlength="10">
+                  <span ng-show="error.cedula ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.cedula ? true : false" class="help-block">{{error.cedula.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.nombre ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-user" style="color: #222"></i></div>
+                  <input title="Solo se permite letras mayusculas y/o minusculas" ng-model="usuarioNuevo.nombre" type="text" id="nombre" class="form-control" placeholder="Nombre Completo"  ng-trim="true" maxlength="35">
+                  <span ng-show="error.nombre ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.nombre ? true : false" class="help-block">{{error.nombre.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.telefono ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-phone" style="color: #222"></i></div>
+                  <input title="Solo se permite Numeros" ng-model="usuarioNuevo.telefono" type="text" id="telefono" class="form-control" placeholder="telefono" ng-trim="true" maxlength="15">
+                  <span ng-show="error.telefono ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.telefono ? true : false" class="help-block">{{error.telefono.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.correo ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-envelope" style="color: #222"></i></div>
+                  <input ng-model="usuarioNuevo.correo" type="text" id="correo" class="form-control" placeholder="correo" ng-trim="true" maxlength="35">
+                  <span ng-show="error.correo ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.correo ? true : false" class="help-block">{{error.correo.message}}</span>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="page-header">
+                <p class="tituloModal"><span class="fa fa-user-secret"></span> Datos Del Usuario</p>
+              </div>
+              <div class="form-group" ng-class="error.usuario ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-user-secret" style="color: #222"></i></div>
+                  <input pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="usuarioNuevo.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario"  ng-trim="true" maxlength="20">
+                  <span ng-show="error.usuario ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.usuario ? true : false" class="help-block">{{error.usuario.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.contrasena ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-key" style="color: #222"></i></div>
+                  <input ng-model="usuarioNuevo.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" maxlength="20">
+                  <span ng-show="error.contrasena ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.contrasena ? true : false" class="help-block">{{error.contrasena.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.contrasena2 ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-key" style="color: #222"></i></div>
+                  <input ng-model="usuarioNuevo.contrasena2" type="password" id="contrasena2" class="form-control" placeholder="Confirmar Contraseña" maxlength="20">
+                  <span ng-show="error.contrasena2 ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.contrasena2 ? true : false" class="help-block">{{error.contrasena2.message}}</span>
               </div>
               <div class="form-group">
-                <input ng-model="usuarioNuevo.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" required>
-              </div>
-              <div class="form-group has-error has-feedback">
-                <select ng-model="usuarioNuevo.rol_id" class="form-control" required>
+                <select ng-model="usuarioNuevo.rol_id" class="form-control" >
                   <option value="">Selecione el rol</option>
                   <option value="1">Administrador</option>
                   <option value="2">Cliente</option>
                 </select>
-                <span class="help-block">El usuario ya existe</span>
               </div>
               <div class="text-right">
-                <button class="btn btn-primary" type="submit">Agregar</button>
+                <button class="btn btn-primary" type="submit">Agregar Nuevo Usuario</button>
                 <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -98,15 +154,15 @@
 
 <!-- MODAL EDITAR -->
 <div class="modal fade" id="modalEditar">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-body">
+      <div class="modal-body bordeModal">
         <div class="row">
-          <div class="col-xs-10 col-xs-offset-1">
-            <div class="page-header">
-              <p>Editar Usuario</p>
-            </div>
-            <form ng-submit="submitEditar()">
+          <form ng-submit="submitEditar()">
+            <div class="col-lg-5 col-lg-offset-1">
+              <div class="page-header">
+                <p class="tituloModal"><span class="glyphicon glyphicon-user"></span> Datos Personales</p>
+              </div>
               <div class="form-group" hidden>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i>
@@ -114,32 +170,142 @@
                   <input type="text" class="form-control" ng-model="edit.id" aria-label="..." readonly placeholder="id">
                 </div>
               </div>
-              <div class="form-group has-error has-feedback">
-                <input pattern="[0-9]+" title="Solo se permite Numeros" ng-model="edit.cedula" type="text" id="cedula" class="form-control" placeholder="Cedula" required ng-trim="true" maxlength="10">
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <span class="help-block">El usuario ya existe</span>
+              <div class="form-group" ng-class="error.cedula ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-credit-card" style="color: #222"></i></div>
+                  <input title="Solo se permite Numeros" ng-model="edit.cedula" type="text" id="cedula" class="form-control" placeholder="Cedula" ng-trim="true" maxlength="10">
+                  <span ng-show="error.cedula ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.cedula ? true : false" class="help-block">{{error.cedula.message}}</span>
               </div>
-              <div class="form-group has-error has-feedback">
-                <input pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="edit.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario" required ng-trim="true" maxlength="20">
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <span class="help-block">El usuario ya existe</span>
+              <div class="form-group" ng-class="error.nombre ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-user" style="color: #222"></i></div>
+                  <input title="Solo se permite letras mayusculas y/o minusculas" ng-model="edit.nombre" type="text" id="-znombre" class="form-control" placeholder="Nombre Completo"  ng-trim="true" maxlength="20">
+                  <span ng-show="error.nombre ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.nombre ? true : false" class="help-block">{{error.nombre.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.telefono ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-phone" style="color: #222"></i></div>
+                  <input title="Solo se permite Numeros" ng-model="edit.telefono" type="text" id="telefono" class="form-control" placeholder="telefono" ng-trim="true" maxlength="10">
+                  <span ng-show="error.telefono ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.telefono ? true : false" class="help-block">{{error.telefono.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.correo ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="glyphicon glyphicon-envelope" style="color: #222"></i></div>
+                  <input ng-model="edit.correo" type="text" id="correo" class="form-control" placeholder="correo" ng-trim="true" maxlength="40">
+                  <span ng-show="error.correo ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.correo ? true : false" class="help-block">{{error.correo.message}}</span>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="page-header">
+                <p class="tituloModal"><span class="fa fa-user-secret"></span> Datos Del Usuario</p>
+              </div>
+              <div class="form-group" ng-class="error.usuario ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-user-secret" style="color: #222"></i></div>
+                  <input pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="edit.usuario" type="text" id="usuario" class="form-control" placeholder="Usuario"  ng-trim="true" maxlength="20">
+                  <span ng-show="error.usuario ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.usuario ? true : false" class="help-block">{{error.usuario.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.contrasena ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-key" style="color: #222"></i></div>
+                  <input ng-model="edit.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" >
+                  <span ng-show="error.contrasena ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.contrasena ? true : false" class="help-block">{{error.contrasena.message}}</span>
+              </div>
+              <div class="form-group" ng-class="error.contrasena2 ? 'has-error has-feedback' : null">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-key" style="color: #222"></i></div>
+                  <input ng-model="edit.contrasena2" type="password" id="contrasena2" class="form-control" placeholder="Confirmar Contraseña" >
+                  <span ng-show="error.contrasena2 ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                </div>
+                <span ng-show="error.contrasena2 ? true : false" class="help-block">{{error.contrasena2.message}}</span>
               </div>
               <div class="form-group">
-                <input ng-model="edit.contrasena" type="password" id="contrasena" class="form-control" placeholder="Contraseña" required>
-              </div>
-              <div class="form-group has-error has-feedback">
-                <select ng-model="edit.rol_id" class="form-control" required>
+                <select ng-model="edit.rol_id" class="form-control" >
                   <option value="">Selecione el rol</option>
                   <option value="1">Administrador</option>
                   <option value="2">Cliente</option>
                 </select>
-                <span class="help-block">El usuario ya existe</span>
               </div>
               <div class="text-right">
-                <button class="btn btn-primary" type="submit">Editar</button>
+                <button class="btn btn-warning" type="submit">Editar Usuario</button>
                 <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
               </div>
-            </form>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER -->
+<div class="modal fade" id="modalVer">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body bordeModal">
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <div class="page-header">
+              <p class="tituloModal"><span class="glyphicon glyphicon-user"></span> Datos Personales</p>
+            </div>
+            <div class="form-group" hidden>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i>
+                </span>
+                <input type="text" class="form-control" ng-model="edit.id" aria-label="..." readonly placeholder="id">
+              </div>
+            </div>
+            <p><strong>Cedula:</strong></p>
+            <div class="form-group" ng-class="error.cedula ? 'has-error has-feedback' : null">
+              <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-credit-card" style="color: #222"></i></div>
+                <input readonly title="Solo se permite Numeros" ng-model="edit.cedula" type="text" id="cedula" class="form-control" placeholder="Cedula" ng-trim="true" maxlength="10">
+                <span ng-show="error.cedula ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+              </div>
+              <span ng-show="error.cedula ? true : false" class="help-block">{{error.cedula.message}}</span>
+            </div>
+            <p><strong>Nombre Completo:</strong></p>
+            <div class="form-group" ng-class="error.nombre ? 'has-error has-feedback' : null">
+              <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-user" style="color: #222"></i></div>
+                <input readonly pattern="[a-zA-Z]+" title="Solo se permite letras mayusculas y/o minusculas" ng-model="edit.nombre" type="text" id="nombre" class="form-control" placeholder="Nombre Completo"  ng-trim="true" maxlength="20">
+                <span ng-show="error.nombre ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+              </div>
+              <span ng-show="error.nombre ? true : false" class="help-block">{{error.nombre.message}}</span>
+            </div>
+            <p><strong>Telefono:</strong></p>
+            <div class="form-group" ng-class="error.telefono ? 'has-error has-feedback' : null">
+              <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-phone" style="color: #222"></i></div>
+                <input readonly title="Solo se permite Numeros" ng-model="edit.telefono" type="text" id="telefono" class="form-control" placeholder="telefono" ng-trim="true" maxlength="10">
+                <span ng-show="error.telefono ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+              </div>
+              <span ng-show="error.telefono ? true : false" class="help-block">{{error.telefono.message}}</span>
+            </div>
+            <p><strong>Correo:</strong></p>
+            <div class="form-group" ng-class="error.correo ? 'has-error has-feedback' : null">
+              <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-envelope" style="color: #222"></i></div>
+                <input readonly ng-model="edit.correo" type="text" id="correo" class="form-control" placeholder="correo" ng-trim="true" maxlength="40">
+                <span ng-show="error.correo ? true : false" class="glyphicon glyphicon-remove form-control-feedback"></span>
+              </div>
+              <span ng-show="error.correo ? true : false" class="help-block">{{error.correo.message}}</span>
+            </div>
+            <div class="text-right">
+              <button class="btn btn-default" type="button" data-dismiss="modal">Salir</button>
+            </div>
           </div>
         </div>
       </div>
@@ -155,13 +321,13 @@
         <div class="row">
           <div class="col-xs-10 col-xs-offset-1">
             <div class="page-header">
-              <p>Eliminar Usuario</p>
+              <p class="tituloModal"><span class="glyphicon glyphicon-trash"></span> Eliminar Usuario</p>
             </div>
             Se va a Eliminar El Usario
-            <h3>{{alias}}</h3>
+            <h3 class="text-center">{{nombre}}</h3>
             <div class="text-right">
               <button ng-click="submitEliminar()" type="button" class="btn btn-danger btn-block btn-sm">Eliminar</button>
-              <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
+              <button class="btn btn-default btn-block" type="button" data-dismiss="modal">Cancelar</button>
             </div>
           </div>
         </div>

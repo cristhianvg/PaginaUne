@@ -9,14 +9,17 @@ angular.module('myApp').service('ajaxService', function ($http) {
   this.nuevoUsuario = function (data) {
     return $http.post('http://localhost/PaginaUne/www/server.php/nuevoUsuario', $.param(data));
   };
-  
+
   this.eliminarUsu = function (data) {
     return $http.post('http://localhost/PaginaUne/www/server.php/borrarUsuario', $.param(data));
   };
-  
+
   this.editarUsu = function (data) {
     return $http.post('http://localhost/PaginaUne/www/server.php/editarUsuario', $.param(data));
   };
 
+  this.nuevoUsuarioPrueba = function (data) {
+    return $http.post('http://localhost/PaginaUne/www/server.php/nuevoUsuarioPrueba', $.param(data));
+  };
 });
 

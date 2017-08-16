@@ -72,6 +72,23 @@ angular.module('myApp').config(function ($stateProvider, $urlRouterProvider, $lo
           ]);
         }]
     }
+  }).state('prueba', {
+    url: '/prueba',
+    templateUrl: 'app/template/prueba.html',
+    controller: 'pruebaController',
+    resolve: {
+      deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load([
+            {
+              serie: true,
+              files: [
+                'app/service/service.ajax.js',
+                'app/controller/controller.prueba.js'
+              ]
+            }
+          ]);
+        }]
+    }
   }).state('simulador', {
     url: '/simulador',
     templateUrl: 'app/template/simulador.html',

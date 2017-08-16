@@ -1,16 +1,15 @@
-angular.module('myApp').controller('gestionUsuariosController', function ($scope, $sessionStorage, $localStorage, $state, ajaxService) {
+angular.module('myApp').controller('pruebaController', function ($scope, $sessionStorage, $localStorage, $state, ajaxService) {
 
   if (typeof $sessionStorage.usuario === "undefined" && typeof $localStorage.usuario === "undefined") {
     $state.go('login');
   }
 
-  $scope.cero = 'active';
+  $scope.uno = 'active';
   $scope.usuarioNuevo = {};
   $scope.usuarios = [];
   $scope.edit = {};
   $scope.error = {};
-  $scope.Registrado = true;
-  
+
 //  ajaxService.getUsuarios.then(function success(response) {
 //    $scope.usuarios = response.data.usuarios;
 //  }, function error(response) {
@@ -31,15 +30,14 @@ angular.module('myApp').controller('gestionUsuariosController', function ($scope
 
   $scope.pintarTablaUsu();
 
-  $scope.submitAgregarUsu = function () {
-    ajaxService.nuevoUsuario($scope.usuarioNuevo).then(function success(response) {
+  $scope.submitAgregarPrueba = function () {
+    ajaxService.nuevoUsuarioPrueba($scope.usuarioNuevo).then(function success(response) {
       if (response.data.code === 200) {
         $scope.error = {};
         console.log('Todo BIEN');
         $state.go('gestionUsuarios', {}, {reload: true});
         $('div[class="modal-backdrop fade in"]').remove();
         location.reload();
-        $scope.Registrado = true;
       } else if (response.data.code === 300) {
         $scope.error = response.data.error;
       } else if (response.data.code === 500) {
@@ -48,16 +46,6 @@ angular.module('myApp').controller('gestionUsuariosController', function ($scope
     }, function error(response) {
       console.error(response);
     });
-  };
-
-  $scope.ver = function (dato) {
-    $('#modalVer').modal('toggle');
-    $scope.edit.id = dato.usu_id;
-    $scope.edit.cedula = dato.usu_cedula;
-    $scope.edit.usuario = dato.usu_alias;
-    $scope.edit.nombre = dato.usu_nombre;
-    $scope.edit.telefono = dato.usu_telefono;
-    $scope.edit.correo = dato.usu_correo;
   };
 
   $scope.editar = function (dato) {
@@ -65,24 +53,13 @@ angular.module('myApp').controller('gestionUsuariosController', function ($scope
     $scope.edit.id = dato.usu_id;
     $scope.edit.cedula = dato.usu_cedula;
     $scope.edit.usuario = dato.usu_alias;
-    $scope.edit.nombre = dato.usu_nombre;
-    $scope.edit.telefono = dato.usu_telefono;
-    $scope.edit.correo = dato.usu_correo;
   };
 
   $scope.submitEditar = function () {
     ajaxService.editarUsu($scope.edit).then(function success(response) {
-      if (response.data.code === 200) {
-        $scope.error = {};
-        console.log('Todo BIEN');
-        $state.go('gestionUsuarios', {}, {reload: true});
-        $('div[class="modal-backdrop fade in"]').remove();
-        location.reload();
-      } else if (response.data.code === 300) {
-        $scope.error = response.data.error;
-      } else if (response.data.code === 500) {
-        console.error(response);
-      }
+      $state.go('gestionUsuarios', {}, {reload: true});
+      $('div[class="modal-backdrop fade in"]').remove();
+      //location.reload();
     }, function error(response) {
       console.error(response);
     });
@@ -90,7 +67,7 @@ angular.module('myApp').controller('gestionUsuariosController', function ($scope
 
   $scope.eliminar = function (dato) {
     $('#modalEliminarUsuario').modal('toggle');
-    $scope.nombre = dato.usu_nombre;
+    $scope.alias = dato.usu_alias;
     $scope.ideliminar = dato.usu_id;
   };
 

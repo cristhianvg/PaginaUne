@@ -5,19 +5,59 @@
  */
 class validate {
 
+  /**
+   * Validación del tipo ¿el valor será numérico?
+   */
   const IS_NUMBER = 0;
-  const IS_NULL = 1;
-  const IS_NOT_NULL = 2;
-  const EXISTS_IN_DATABASE = 3;
 
   /**
-   * 
+   * Validación del tipo ¿el valor principal será igual al valor secundario?
+   */
+  const IS_EQUAL = 1;
+
+  /**
+   * Validación del tipo ¿el valor principal no es igual al valor secundario?
+   */
+  const IS_NOT_EQUAL = 2;
+
+  /**
+   * Validación por medio de una expresión regular
+   */
+  const PATTERN = 3;
+
+  /**
+   * Validación de un correo electrónico
+   */
+  const IS_EMAIL = 4;
+
+  /**
+   * Validación del tipo ¿el valor princial es nulo?
+   */
+  const IS_NULL = 5;
+
+  /**
+   * Validación del tipo ¿el valor principal no será nulo?
+   */
+  const IS_NOT_NULL = 6;
+
+  /**
+   * Validación del tipo ¿el valor existe en base de datos?
+   */
+  const EXISTS_IN_DATABASE = 7;
+
+  /**
+   * Validación personalizada
+   */
+  const CUSTOM = 8;
+
+  /**
+   * Variable contenedora de la configuración para realizar las validaciones
    * @var string
    */
   private $form;
 
   /**
-   * 
+   * Variable recolectora de los errores presentados para la configuración de validación
    * @var array
    */
   private $error = array();
@@ -27,7 +67,7 @@ class validate {
   }
 
   /**
-   * 
+   * Método para obtener el array de errores
    * @return array
    */
   public function getError(): array {
@@ -35,7 +75,7 @@ class validate {
   }
 
   /**
-   * 
+   * Método para setear un error a un input determinado
    * @param string $input
    * @param string $message
    */
@@ -44,7 +84,7 @@ class validate {
   }
 
   /**
-   * 
+   * Método principal para realizar la validación, el cual devolverá VERDADERO si la validación pasó totalmente o de lo contrario, devolverá FALSO
    * @return bool
    */
   public function isValidate(): bool {
@@ -63,8 +103,40 @@ class validate {
             }
             break;
 
-          // IS_NULL
+          // IS_EQUAL
           case 1:
+            if (!($validations['value'] == $validations[$x]['otherValue'])) {
+              $flag = false;
+              $flagCnt++;
+            }
+            break;
+
+          // IS_NOT_EQUAL
+          case 2:
+            if ($validations['value'] == $validations[$x]['otherValue']) {
+              $flag = false;
+              $flagCnt++;
+            }
+            break;
+
+          // PATTERN
+          case 3:
+            if (!preg_match($validations[$x]['pattern'], $validations['value'])) {
+              $flag = false;
+              $flagCnt++;
+            }
+            break;
+
+          // IS_EMAIL
+          case 4:
+            if (filter_var($validations['value'], FILTER_VALIDATE_EMAIL) === false) {
+              $flag = false;
+              $flagCnt++;
+            }
+            break;
+
+          // IS_NULL
+          case 5:
             if (strlen($validations['value']) > 0) {
               $flag = false;
               $flagCnt++;
@@ -72,7 +144,7 @@ class validate {
             break;
 
           // IS_NOT_NULL
-          case 2:
+          case 6:
             if (is_null($validations['value']) === true or $validations['value'] === '') {
               $flag = false;
               $flagCnt++;
@@ -80,8 +152,22 @@ class validate {
             break;
 
           // EXISTS_IN_DATABASE
-          case 3:
+          case 7:
             if ($validations[$x]['answer'] === true) {
+              $flag = false;
+              $flagCnt++;
+            }
+            break;
+
+          // CUSTOM
+          case 8:
+            if (isset($validations[$x]['files']) and is_array($validations[$x]['files']) and count($validations[$x]['files']) > 0) {
+              foreach ($validations[$x]['files'] as $file) {
+                require_once $file;
+              }
+            }
+            $class = new $validations[$x]['class']();
+            if ($class->validate($validations['value'], (isset($validations[$x]['params'])) ? $validations[$x]['params'] : array()) === false) {
               $flag = false;
               $flagCnt++;
             }

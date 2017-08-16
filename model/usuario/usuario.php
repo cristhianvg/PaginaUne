@@ -2,11 +2,12 @@
 
 class usuario {
 
-  private $id, $rol_id, $usuario, $contrasena, $cedula, $activo, $created_at, $deleted_at, $hash;
+  private $id, $rol_id, $usuario, $contrasena, $cedula, $nombre, $telefono, $correo, $activo, $created_at, $deleted_at, $hash;
 
   public function __construct($hash) {
     $this->hash = $hash;
   }
+
   function getCedula() {
     return $this->cedula;
   }
@@ -70,5 +71,29 @@ class usuario {
   public function setDeleted_at($deleted_at) {
     $this->deleted_at = $deleted_at;
   }
+
+  function getNombre() {
+    return $this->nombre;
+  }
+
+  function getTelefono() {
+    return $this->telefono;
+  }
+
+  function setNombre($nombre) {
+    $this->nombre = $nombre;
+  }
+
+  function setTelefono($telefono) {
+    $this->telefono = $telefono;
+  }
+  function getCorreo() {
+    return $this->correo;
+  }
+
+  function setCorreo($correo) {
+    $this->correo = $correo;
+  }
+
 
 }
